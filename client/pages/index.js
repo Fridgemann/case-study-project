@@ -4,9 +4,11 @@ import React, { useEffect, useState } from 'react';
 
 const PageTitle = () => {
   return(
-    <div style={{ fontFamily: 'Avenir' }}className='text-6xl flex justify-center m-3.5'>Product List</div>
+    <div className='text-3xl sm:text-4xl md:text-5xl text-center m-3.5 mt-30'>Product List</div>
   )
-}
+};
+
+
 
 const Index = () => {
 
@@ -27,7 +29,7 @@ const Index = () => {
 
   return (
     <>
-      <PageTitle />
+      <PageTitle style={{ fontFamily: 'Avenir' }}/>
       <div>
         {
         products.map((product, index) => (
