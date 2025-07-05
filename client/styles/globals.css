@@ -1,3 +1,7 @@
 @import "tailwindcss";
 
 
+@font-face {
+    font-family: 'Avenir';
+    src: url('../public/Fonts/avenir/Avenir-Book.ttf');
+}

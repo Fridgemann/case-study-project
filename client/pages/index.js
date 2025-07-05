@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 const PageTitle = () => {
   return(
-    <div className=' text-6xl flex justify-center m-3.5'>Product List</div>
+    <div style={{ fontFamily: 'Avenir' }}className='text-6xl flex justify-center m-3.5'>Product List</div>
   )
 }
 
