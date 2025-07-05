@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+
+const PageTitle = () => {
+  return(
+    <div className=' text-6xl flex justify-center m-3.5'>Product List</div>
+  )
+}
+
 const Index = () => {
 
   // const [message, setMessage] = useState("Loading");
@@ -18,16 +25,19 @@ const Index = () => {
   }, []);
 
   return (
-    <div>
-      {
-      products.map((product, index) => (
-        <div key={index}>
-          {product.name}
-          {/* <img src={product.images.yellow}></img> */}
-        </div>
-      ))
-      }
-    </div>
+    <>
+      <PageTitle />
+      <div>
+        {
+        products.map((product, index) => (
+          <div key={index}>
+            {product.name}
+            {/* <img src={product.images.yellow}></img> */}
+          </div>
+        ))
+        }
+      </div>
+    </>
   );
 }
 
