@@ -17,7 +17,7 @@ const ColorButton = ({ color, isSelected, onClick }) => {
         ${isSelected ? 'border-black' : 'border-hidden'}
         hover:cursor-pointer`}
     >
-      <div className={`w-6 h-6 rounded-full ${color}`}></div>
+      <div className={`w-6.5 h-6.5 rounded-full ${color}`}></div>
     </button>
   )
 }
@@ -39,7 +39,9 @@ const ProductCard = ({ image, name, price }) => {
             key={index}
             color={color}
             isSelected={selectedColorIndex === index}
-            onClick={() => setSelectedColorIndex(index)}
+            onClick={() => 
+              setSelectedColorIndex(selectedColorIndex === index ? null : index)
+            }
           />
         ))}
       </div>
@@ -79,7 +81,7 @@ const Index = () => {
       </div>
       <div className='flex overflow-x-auto space-x-4 p-10 gap-20 mt-50'>
         {products.map((product, index) => (
-          <ProductCard key={index} name={product.name} image={product.images.yellow} price={index}/>
+          <ProductCard key={index} name={product.name} image={product.images.yellow} price={'$500'}/>
       ))}
       </div>
       
