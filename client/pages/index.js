@@ -8,7 +8,19 @@ const PageTitle = () => {
   )
 };
 
+const ProductCard = ({  image, name, price}) => {
+  return (
+    <div className='justify-center flex-col '>
+      <img className='rounded' src={image}></img>
+      <p>{name}</p>
+      <p>{price}</p>
 
+      <button className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600"></button>
+      <button className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600"></button>
+      <button className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600"></button>
+    </div>
+  )
+}
 
 const Index = () => {
 
@@ -28,19 +40,25 @@ const Index = () => {
   }, []);
 
   return (
-    <>
+    <div>
       <PageTitle style={{ fontFamily: 'Avenir' }}/>
       <div>
         {
-        products.map((product, index) => (
-          <div key={index}>
-            {product.name}
-            {/* <img src={product.images.yellow}></img> */}
-          </div>
-        ))
+        // products.map((product, index) => (
+        //   <div key={index}>
+        //     {product.name}
+        //     {/* <img src={product.images.yellow}></img> */}
+        //   </div>
+        // ))
         }
       </div>
-    </>
+      <div className='flex overflow-x-auto space-x-4 p-4 gap-4 mt-50'>
+        {products.map((product, index) => (
+          <ProductCard name={product.name} image={product.images.yellow} price={index}/>
+      ))}
+      </div>
+      
+    </div>
   );
 }
 
