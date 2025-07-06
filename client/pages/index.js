@@ -13,9 +13,12 @@ const ColorButton = ({ color, isSelected, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className={`w-8 h-8 rounded-full ${color} hover:cursor-pointer mt-2 
-        ${isSelected ? 'border-2 border-black' : 'border-none'}`}
-    ></button>
+      className={`w-9 h-9 rounded-full border flex items-center justify-center mt-2
+        ${isSelected ? 'border-black' : 'border-hidden'}
+        hover:cursor-pointer`}
+    >
+      <div className={`w-6 h-6 rounded-full ${color}`}></div>
+    </button>
   )
 }
 
