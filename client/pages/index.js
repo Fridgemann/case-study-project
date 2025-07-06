@@ -1,26 +1,54 @@
 import React, { useEffect, useState } from 'react';
 
 
+const FullStar = () => (
+  <svg className="w-5 h-5 text-[#EACB9E]" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966h4.174c.969 0 1.371 1.24.588 1.81l-3.38 2.455
+             1.287 3.966c.3.921-.755 1.688-1.54 1.118l-3.38-2.455-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.286-3.966
+             -3.38-2.455c-.783-.57-.38-1.81.588-1.81h4.174l1.287-3.966z" />
+  </svg>
+)
+
+const HalfStar = () => (
+  <svg className="w-5 h-5" viewBox="0 0 20 20">
+    <defs>
+      <linearGradient id="half-grad">
+        <stop offset="50%" stopColor="#EACB9E" />
+        <stop offset="50%" stopColor="#eee" />
+      </linearGradient>
+    </defs>
+    <path fill="url(#half-grad)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966h4.174c.969 0 1.371 1.24.588 1.81
+             l-3.38 2.455 1.287 3.966c.3.921-.755 1.688-1.54 1.118l-3.38-2.455-3.38 2.455c-.784.57-1.838-.197-1.539-1.118
+             l1.286-3.966-3.38-2.455c-.783-.57-.38-1.81.588-1.81h4.174l1.287-3.966z" />
+  </svg>
+)
+
+const EmptyStar = () => (
+  <svg className="w-5 h-5 text-[#eee]" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966h4.174c.969 0 1.371 1.24.588 1.81l-3.38 2.455
+             1.287 3.966c.3.921-.755 1.688-1.54 1.118l-3.38-2.455-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.286-3.966
+             -3.38-2.455c-.783-.57-.38-1.81.588-1.81h4.174l1.287-3.966z" />
+  </svg>
+)
+
+
+
 const PopularityStars = ({ score }) => {
   const totalStars = 5;
-  const fullStars = Math.floor(score * totalStars);
-  const isHalf = (score * totalStars) % 1 >= 0.25 && (score * totalStars) % 1 < 0.75;
-  const emptyStars = totalStars - fullStars - (isHalf ? 1 : 0);
+  const rating = score * totalStars;
 
   return (
-    <div className=" gap-2 flex items-center space-x-1">
-      {/* stars */}
-      <div className="flex text-[20px] text-[#EACB9E]">
-        {[...Array(fullStars)].map((_, i) => <span key={`full-${i}`}>★</span>)}
-        {isHalf && <span className="text-[#d3c2a1]">★</span>}
-        {[...Array(emptyStars)].map((_, i) => <span key={`empty-${i}`} className="text-gray-300">★</span>)}
-      </div>
-
-      {/* score text */}
-      <p className="mt-1 font-avenir text-[14px]">{(score * 5).toFixed(1)} / 5</p>
+    <div className="flex items-center gap-1">
+      {[...Array(totalStars)].map((_, i) => {
+        if (rating >= i + 1) return <FullStar key={i} />
+        if (rating >= i + 0.25 && rating < i + 0.75) return <HalfStar key={i} />
+        return <EmptyStar key={i} />
+      })}
+      <span className="text-sm text-gray-700 ml-2">{rating.toFixed(1)} / 5</span>
     </div>
-  );
-};
+  )
+}
+
 
 
 
