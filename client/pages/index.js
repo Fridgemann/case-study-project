@@ -8,16 +8,29 @@ const PageTitle = () => {
   )
 };
 
+
+const ColorButton = ({ color }) => {
+  const [selected, setSelected] = useState(false);
+
+  return (
+    <button onClick={() => setSelected(!selected)} className={`w-8 h-8 rounded-full ${color} hover:cursor-pointer mt-2 
+    ${selected ? 'border-2 border-black': 'border:none'}`}></button>
+  )
+
+}
+
 const ProductCard = ({  image, name, price}) => {
   return (
-    <div className='justify-center flex-col '>
-      <img className='rounded' src={image}></img>
+    <div className='justify-center flex-col flex gap-2.5'>
+      <img className='rounded-2xl' src={image}></img>
       <p>{name}</p>
       <p>{price}</p>
 
-      <button className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600"></button>
-      <button className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600"></button>
-      <button className="w-12 h-12 rounded-full bg-blue-500 hover:bg-blue-600"></button>
+      <div className='flex gap-2 justify-start'>
+        <ColorButton color='bg-yellowGold'/>
+        <ColorButton color='bg-whiteGold'/>
+        <ColorButton color='bg-roseGold'/>
+      </div>
     </div>
   )
 }
@@ -52,7 +65,7 @@ const Index = () => {
         // ))
         }
       </div>
-      <div className='flex overflow-x-auto space-x-4 p-4 gap-4 mt-50'>
+      <div className='flex overflow-x-auto space-x-4 p-10 gap-20 mt-50'>
         {products.map((product, index) => (
           <ProductCard name={product.name} image={product.images.yellow} price={index}/>
       ))}
