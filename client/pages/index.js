@@ -14,7 +14,7 @@ const ColorButton = ({ color, isSelected, onClick }) => {
     <button
       onClick={onClick}
       className={`w-9 h-9 rounded-full border flex items-center justify-center mt-2
-        ${isSelected ? 'border-black' : 'border-hidden'}
+        ${isSelected ? 'border-black' : 'border-transparent'}
         hover:cursor-pointer`}
     >
       <div className={`w-6.5 h-6.5 rounded-full ${color}`}></div>
