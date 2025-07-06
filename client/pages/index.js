@@ -1,6 +1,28 @@
 import React, { useEffect, useState } from 'react';
 
 
+const PopularityStars = ({ score }) => {
+  const totalStars = 5;
+  const fullStars = Math.floor(score * totalStars);
+  const isHalf = (score * totalStars) % 1 >= 0.25 && (score * totalStars) % 1 < 0.75;
+  const emptyStars = totalStars - fullStars - (isHalf ? 1 : 0);
+
+  return (
+    <div className=" gap-2 flex items-center space-x-1">
+      {/* stars */}
+      <div className="flex text-[20px] text-[#EACB9E]">
+        {[...Array(fullStars)].map((_, i) => <span key={`full-${i}`}>★</span>)}
+        {isHalf && <span className="text-[#d3c2a1]">★</span>}
+        {[...Array(emptyStars)].map((_, i) => <span key={`empty-${i}`} className="text-gray-300">★</span>)}
+      </div>
+
+      {/* score text */}
+      <p className="mt-1 font-avenir text-[14px]">{(score * 5).toFixed(1)} / 5</p>
+    </div>
+  );
+};
+
+
 
 const PageTitle = () => {
   return(
@@ -24,7 +46,7 @@ const ColorButton = ({ color, isSelected, onClick }) => {
 
 
 const ProductCard = ({ product }) => {
-  const { name, price, images } = product;
+  const { name, price, images, popularityScore } = product;
   const colors = ['bg-yellowGold', 'bg-whiteGold', 'bg-roseGold'];
   const colorNames = ['Yellow Gold', 'White Gold', 'Rose Gold'];
   const imgColorNames = ['yellow', 'white', 'rose'];
@@ -62,6 +84,7 @@ const ProductCard = ({ product }) => {
       {selectedColorIndex !== null && (
         <p className='font-avenir font-normal text-[14px]'>{colorNames[selectedColorIndex]}</p>
       )}
+      <PopularityStars score={popularityScore}/>
     </div>
   );
 };
