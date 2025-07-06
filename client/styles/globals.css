@@ -4,10 +4,19 @@
 @font-face {
     font-family: 'Avenir';
     src: url('../public/Fonts/avenir/Avenir-Book.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../public/Fonts/montserat/Montserrat-Regular.ttf');
 }
 
 @theme {
     --color-yellowGold: #E6CA97;
     --color-whiteGold: #D9D9D9;
     --color-roseGold: #E1A4A9;
+    --font-avenir: 'Avenir';
+    --font-montserrat: 'Montserrat';
 }

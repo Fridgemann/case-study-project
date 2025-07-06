@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 const PageTitle = () => {
   return(
-    <div className='text-3xl sm:text-4xl md:text-5xl text-center m-3.5 mt-30'>Product List</div>
+    <div className='font-avenir text-[45px] text-center m-3.5 mt-30'>Product List</div>
   )
 };
 
@@ -23,15 +23,23 @@ const ColorButton = ({ color, isSelected, onClick }) => {
 }
 
 
-const ProductCard = ({ image, name, price }) => {
-  const colors = ['bg-yellowGold', 'bg-whiteGold', 'bg-roseGold']
-  const [selectedColorIndex, setSelectedColorIndex] = useState(null)
+const ProductCard = ({ product }) => {
+  const { name, price, images } = product;
+  const colors = ['bg-yellowGold', 'bg-whiteGold', 'bg-roseGold'];
+  const colorNames = ['Yellow Gold', 'White Gold', 'Rose Gold'];
+  const imgColorNames = ['yellow', 'white', 'rose'];
+
+  const [selectedColorIndex, setSelectedColorIndex] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
 
   return (
-    <div className='justify-center flex-col flex gap-2.5'>
-      <img className='rounded-2xl' src={image} />
-      <p>{name}</p>
-      <p>{price}</p>
+    <div className='min-w-[280px] sm:min-w-[320px] md:min-w-[360px] p-4 rounded-xl  flex flex-col gap-2.5'>
+      <img
+        className='rounded-2xl'
+        src={selectedColor ? images[selectedColor] : images.yellow}
+      />
+      <p className='text-[15px] font-medium font-montserrat'>{name}</p>
+      <p className='text-[15px] font-montserrat'>{'$500'}</p>
 
       <div className='flex gap-2 justify-start'>
         {colors.map((color, index) => (
@@ -39,15 +47,25 @@ const ProductCard = ({ image, name, price }) => {
             key={index}
             color={color}
             isSelected={selectedColorIndex === index}
-            onClick={() => 
-              setSelectedColorIndex(selectedColorIndex === index ? null : index)
-            }
+            onClick={() => {
+              setSelectedColorIndex(
+                selectedColorIndex === index ? null : index
+              );
+              setSelectedColor(
+                selectedColorIndex === index ? null : imgColorNames[index]
+              );
+            }}
           />
         ))}
       </div>
+
+      {selectedColorIndex !== null && (
+        <p className='font-avenir font-normal text-[14px]'>{colorNames[selectedColorIndex]}</p>
+      )}
     </div>
-  )
-}
+  );
+};
+
 
 const Index = () => {
 
@@ -68,7 +86,7 @@ const Index = () => {
 
   return (
     <div>
-      <PageTitle style={{ fontFamily: 'Avenir' }}/>
+      <PageTitle />
       <div>
         {
         // products.map((product, index) => (
@@ -81,7 +99,7 @@ const Index = () => {
       </div>
       <div className='flex overflow-x-auto space-x-4 p-10 gap-20 mt-50'>
         {products.map((product, index) => (
-          <ProductCard key={index} name={product.name} image={product.images.yellow} price={'$500'}/>
+          <ProductCard key={index} product={product}/>
       ))}
       </div>
       
