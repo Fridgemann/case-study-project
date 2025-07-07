@@ -130,7 +130,6 @@ const Index = () => {
   useEffect(() => {
     const fetchData = async () => {
       const productRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?sortBy=${sortBy}`);
-      console.log('API:', process.env.NEXT_PUBLIC_API_URL);
       const productData = await productRes.json();
       setProducts(productData.products || []);
     };
