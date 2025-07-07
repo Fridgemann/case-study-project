@@ -35,8 +35,6 @@ app.get('/api/products', async (req, res) => {
       const pricePerGram = data.price / 31.1035;
       cachedGoldPrice = Number(pricePerGram.toFixed(2));
       lastFetched = now;
-
-      // console.log(`✔ Gold price updated at: ${new Date(lastFetched).toLocaleString()}`); for debugging
     }
 
     const products = PRODUCTS
