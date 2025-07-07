@@ -13,10 +13,16 @@
     src: url('../public/Fonts/montserat/Montserrat-Regular.ttf');
 }
 
+@font-face {
+    font-family: 'Montserrat-Medium';
+    src: url('../public/Fonts/montserat/Montserrat-Medium.otf');
+}
+
 @theme {
     --color-yellowGold: #E6CA97;
     --color-whiteGold: #D9D9D9;
     --color-roseGold: #E1A4A9;
     --font-avenir: 'Avenir';
     --font-montserrat: 'Montserrat';
+    --font-montserratMedium: 'Montserrat-Medium';
 }

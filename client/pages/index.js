@@ -44,7 +44,7 @@ const PopularityStars = ({ score }) => {
         if (rating >= i + 0.25 && rating < i + 0.75) return <HalfStar key={i} />
         return <EmptyStar key={i} />
       })}
-      <span className="text-sm text-gray-700 ml-2">{rating.toFixed(1)} / 5</span>
+      <span className="text-[14px] text-gray-700 ml-2">{rating.toFixed(1)} / 5</span>
     </div>
   )
 }
@@ -88,7 +88,7 @@ const ProductCard = ({ product, price }) => {
         className='rounded-2xl'
         src={selectedColor ? images[selectedColor] : images.yellow}
       />
-      <p className='text-[15px] font-medium font-montserrat'>{name}</p>
+      <p className='text-[15px] font-medium font-montserratMedium'>{name}</p>
       <p className='text-[15px] font-montserrat'>{`$${price}`}</p>
 
       <div className='flex gap-2 justify-start'>
@@ -112,7 +112,7 @@ const ProductCard = ({ product, price }) => {
       {selectedColorIndex !== null && (
         <p className='font-avenir font-normal text-[14px]'>{colorNames[selectedColorIndex]}</p>
       )}
-      <PopularityStars score={popularityScore}/>
+      <PopularityStars score={popularityScore} />
     </div>
   );
 };
