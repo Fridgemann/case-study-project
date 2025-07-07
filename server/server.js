@@ -1,16 +1,18 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+require('dotenv').config();
+
 const PRODUCTS = require('./data/products.json');
-const PORT = 5000;
-const GOLD_API_KEY = 'goldapi-45f3dsmct8jie8-io'; 
+const PORT = process.env.PORT;
+const GOLD_API_KEY = process.env.GOLD_API_KEY; 
 // i have tried to limit the number of api calls to a call per 10 minute to avoid passing the limit of free tier allowed api calls
 
 app.use(cors());
 
 let cachedGoldPrice = null;
 let lastFetched = 0;
-const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
+const CACHE_DURATION = parseInt(process.env.CACHE_DURATION, 10) || 10 * 60 * 1000;
 const GOLD_API_URL = 'https://www.goldapi.io/api/XAU/USD';
 
 app.get('/api/products', async (req, res) => {
@@ -33,6 +35,8 @@ app.get('/api/products', async (req, res) => {
       const pricePerGram = data.price / 31.1035;
       cachedGoldPrice = Number(pricePerGram.toFixed(2));
       lastFetched = now;
+
+      // console.log(`✔ Gold price updated at: ${new Date(lastFetched).toLocaleString()}`); for debugging
     }
 
     const products = PRODUCTS
