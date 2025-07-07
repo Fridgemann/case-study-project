@@ -144,7 +144,7 @@ const Index = () => {
     <div>
       <PageTitle />
 
-      <div className="relative">
+      <div className="relative select-none">
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex gap-5 px-6 py-10">
             {products.map((product, index) => (
