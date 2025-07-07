@@ -93,7 +93,7 @@ const ProductCard = ({ product, price }) => {
         src={selectedColor ? images[selectedColor] : images.yellow}
       />
       <p className='text-[15px] font-medium font-montserratMedium'>{name}</p>
-      <p className='text-[15px] font-montserrat'>{`$${price}`}</p>
+      <p className='text-[15px] font-montserrat'>{`${price}`}</p>
 
       <div className='flex gap-2 justify-start'>
         {colors.map((color, index) => (
@@ -153,7 +153,7 @@ const Index = () => {
                   product={product}
                   price={
                     goldPrice
-                      ? ((product.popularityScore + 1) * product.weight * goldPrice).toFixed(2)
+                      ? `$${((product.popularityScore + 1) * product.weight * goldPrice).toFixed(2)}`
                       : 'Loading...'
                   }
                 />
