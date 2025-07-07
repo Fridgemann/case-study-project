@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import useEmblaCarousel from 'embla-carousel-react'
+import { useCallback } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+
 
 
 const FullStar = () => (
@@ -119,53 +123,62 @@ const ProductCard = ({ product, price }) => {
 
 
 const Index = () => {
+  const [products, setProducts] = useState([])
+  const [goldPrice, setGoldPrice] = useState(null)
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' })
 
-  // const [message, setMessage] = useState("Loading");
-  const [products, setProducts] = useState([]);
-  const [goldPrice, setGoldPrice] = useState(null);
-
-  
   useEffect(() => {
-    // fetch product data
-    fetch("http://localhost:5000/api/products").then(
-      response => response.json()
-    ).then(
-      data => {
-        // console.log(data.products);
-        // setMessage(data.message);
-        setProducts(data.products);
-      }
-    )
-    // fetch gold price
+    fetch("http://localhost:5000/api/products")
+      .then(response => response.json())
+      .then(data => setProducts(data.products))
+
     fetch("http://localhost:5000/api/gold-price")
       .then(res => res.json())
       .then(data => setGoldPrice(data.price_per_gram))
+  }, [])
 
-  }, []);
-
-  
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
 
   return (
     <div>
       <PageTitle />
-      <div>
-        {
-        // products.map((product, index) => (
-        //   <div key={index}>
-        //     {product.name}
-        //     {/* <img src={product.images.yellow}></img> */}
-        //   </div>
-        // ))
-        }
+
+      <div className="relative">
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-5 px-6 py-10">
+            {products.map((product, index) => (
+              <div key={index} className="min-w-[280px] sm:min-w-[320px] md:min-w-[360px]">
+                <ProductCard
+                  product={product}
+                  price={
+                    goldPrice
+                      ? ((product.popularityScore + 1) * product.weight * goldPrice).toFixed(2)
+                      : 'Loading...'
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={scrollPrev}
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-white text-black p-2 shadow-md rounded-full hover:bg-gray-100 transition"
+        >
+          <ChevronLeft size={20} />
+        </button>
+
+        <button
+          onClick={scrollNext}
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-white text-black p-2 shadow-md rounded-full hover:bg-gray-100 transition"
+        >
+          <ChevronRight size={20} />
+        </button>
+
       </div>
-      <div className='flex overflow-x-auto space-x-4 p-10 gap-20 mt-50'>
-        {products.map((product, index) => (
-          <ProductCard key={index} product={product} price={((product.popularityScore + 1) * product.weight * goldPrice).toFixed(2)} />
-      ))}
-      </div>
-      
     </div>
-  );
+  )
 }
 
 export default Index;
