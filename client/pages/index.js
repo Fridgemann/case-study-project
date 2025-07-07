@@ -129,7 +129,7 @@ const Index = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const productRes = await fetch(`http://localhost:5000/api/products?sortBy=${sortBy}`);
+      const productRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?sortBy=${sortBy}`);
       const productData = await productRes.json();
       setProducts(productData.products || []);
     };
