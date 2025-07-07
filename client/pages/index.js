@@ -73,8 +73,8 @@ const ColorButton = ({ color, isSelected, onClick }) => {
 }
 
 
-const ProductCard = ({ product }) => {
-  const { name, price, images, popularityScore } = product;
+const ProductCard = ({ product, price }) => {
+  const { name, images, popularityScore } = product;
   const colors = ['bg-yellowGold', 'bg-whiteGold', 'bg-roseGold'];
   const colorNames = ['Yellow Gold', 'White Gold', 'Rose Gold'];
   const imgColorNames = ['yellow', 'white', 'rose'];
@@ -89,7 +89,7 @@ const ProductCard = ({ product }) => {
         src={selectedColor ? images[selectedColor] : images.yellow}
       />
       <p className='text-[15px] font-medium font-montserrat'>{name}</p>
-      <p className='text-[15px] font-montserrat'>{'$500'}</p>
+      <p className='text-[15px] font-montserrat'>{`$${price}`}</p>
 
       <div className='flex gap-2 justify-start'>
         {colors.map((color, index) => (
@@ -122,8 +122,11 @@ const Index = () => {
 
   // const [message, setMessage] = useState("Loading");
   const [products, setProducts] = useState([]);
+  const [goldPrice, setGoldPrice] = useState(null);
 
+  
   useEffect(() => {
+    // fetch product data
     fetch("http://localhost:5000/api/products").then(
       response => response.json()
     ).then(
@@ -133,7 +136,14 @@ const Index = () => {
         setProducts(data.products);
       }
     )
+    // fetch gold price
+    fetch("http://localhost:5000/api/gold-price")
+      .then(res => res.json())
+      .then(data => setGoldPrice(data.price_per_gram))
+
   }, []);
+
+  
 
   return (
     <div>
@@ -150,7 +160,7 @@ const Index = () => {
       </div>
       <div className='flex overflow-x-auto space-x-4 p-10 gap-20 mt-50'>
         {products.map((product, index) => (
-          <ProductCard key={index} product={product}/>
+          <ProductCard key={index} product={product} price={((product.popularityScore + 1) * product.weight * goldPrice).toFixed(2)} />
       ))}
       </div>
       
