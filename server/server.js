@@ -3,44 +3,67 @@ const app = express();
 const cors = require('cors');
 const PRODUCTS = require('./data/products.json');
 const PORT = 5000;
-const GOLD_API_KEY = 'goldapi-fmousmcrypac1-io';
+const GOLD_API_KEY = 'goldapi-45f3dsmct8jie8-io'; 
+// i have tried to limit the number of api calls to a call per 10 minute to avoid passing the limit of free tier allowed api calls
 
 app.use(cors());
 
-app.get('/api/gold-price', async (req, res) => {
+let cachedGoldPrice = null;
+let lastFetched = 0;
+const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
+const GOLD_API_URL = 'https://www.goldapi.io/api/XAU/USD';
+
+app.get('/api/products', async (req, res) => {
   try {
-    const apiRes = await fetch('https://www.goldapi.io/api/XAU/USD', {
-      headers: {
-        'x-access-token': GOLD_API_KEY,
-        'Content-Type': 'application/json',
+    const now = Date.now();
+    if (!cachedGoldPrice || now - lastFetched > CACHE_DURATION) {
+      const goldRes = await fetch(GOLD_API_URL, {
+        headers: {
+          'x-access-token': GOLD_API_KEY,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await goldRes.json();
+
+      if (!goldRes.ok || !data.price) {
+        return res.status(goldRes.status).json({ error: data.message || 'Gold price API error' });
       }
-    })
 
-    const data = await apiRes.json()
-
-    if (!apiRes.ok) {
-      return res.status(apiRes.status).json({ error: data.message || 'API error' })
+      const pricePerGram = data.price / 31.1035;
+      cachedGoldPrice = Number(pricePerGram.toFixed(2));
+      lastFetched = now;
     }
 
-    const pricePerOunce = data.price
-    const pricePerGram = pricePerOunce / 31.1035
+    const products = PRODUCTS
 
-    res.json({
-      metal: 'gold',
-      unit: 'gram',
-      currency: 'USD',
-      price_per_gram: Number(pricePerGram.toFixed(2))
-    })
+    const enrichedProducts = products.map(p => ({
+      ...p,
+      price: Number(((p.popularityScore + 1) * p.weight * cachedGoldPrice).toFixed(2))
+    }));
+
+    const { sortBy } = req.query;
+
+    const sortedProducts = [...enrichedProducts];
+
+    if (sortBy === 'price_asc') {
+      sortedProducts.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price_desc') {
+      sortedProducts.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'popularity_asc') {
+      sortedProducts.sort((a, b) => a.popularityScore - b.popularityScore);
+    } else if (sortBy === 'popularity_desc') {
+      sortedProducts.sort((a, b) => b.popularityScore - a.popularityScore);
+    }
+
+
+    res.json({ products: sortedProducts });
+
   } catch (err) {
-    res.status(500).json({ error: 'Internal server error' })
+    console.error('Server error in /api/products:', err.stack || err);
+    res.status(500).json({ error: 'Internal server error' });
   }
-})
-
-
-
-app.get('/api/products', (req, res) => {
-    res.json({ products: PRODUCTS, prices: 'hello' });
-})
+});
 
 app.listen(PORT, () => {
     console.log(`Server started on ${PORT}`);

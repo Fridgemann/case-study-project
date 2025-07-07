@@ -124,18 +124,18 @@ const ProductCard = ({ product, price }) => {
 
 const Index = () => {
   const [products, setProducts] = useState([])
-  const [goldPrice, setGoldPrice] = useState(null)
+  const [sortBy, setSortBy] = useState('');
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' })
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
-      .then(response => response.json())
-      .then(data => setProducts(data.products))
+    const fetchData = async () => {
+      const productRes = await fetch(`http://localhost:5000/api/products?sortBy=${sortBy}`);
+      const productData = await productRes.json();
+      setProducts(productData.products || []);
+    };
 
-    fetch("http://localhost:5000/api/gold-price")
-      .then(res => res.json())
-      .then(data => setGoldPrice(data.price_per_gram))
-  }, [])
+    fetchData();
+  }, [sortBy]);
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
@@ -143,6 +143,33 @@ const Index = () => {
   return (
     <div>
       <PageTitle />
+
+      <div className="flex flex-wrap gap-2 px-6 py-4">
+        <button
+          onClick={() => setSortBy('price_asc')}
+          className={`px-4 py-2 border rounded ${sortBy === 'price_asc' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+        >
+          Price ↑
+        </button>
+        <button
+          onClick={() => setSortBy('price_desc')}
+          className={`px-4 py-2 border rounded ${sortBy === 'price_desc' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+        >
+          Price ↓
+        </button>
+        <button
+          onClick={() => setSortBy('popularity_asc')}
+          className={`px-4 py-2 border rounded ${sortBy === 'popularity_asc' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+        >
+          Popularity ↑
+        </button>
+        <button
+          onClick={() => setSortBy('popularity_desc')}
+          className={`px-4 py-2 border rounded ${sortBy === 'popularity_desc' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+        >
+          Popularity ↓
+        </button>
+      </div>
 
       <div className="relative select-none">
         <div className="overflow-hidden" ref={emblaRef}>
@@ -152,8 +179,8 @@ const Index = () => {
                 <ProductCard
                   product={product}
                   price={
-                    goldPrice
-                      ? `$${((product.popularityScore + 1) * product.weight * goldPrice).toFixed(2)}`
+                    product
+                      ? `$${product.price}`
                       : 'Loading...'
                   }
                 />
